@@ -1,18 +1,15 @@
 from flask import Flask
 from flask import request
-from flask_cors import CORS 
+from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-import logging 
+import logging
 
-import database_manager as dbHandler 
+import database_manager as dbHandler
 
 api = Flask(__name__)
-
 cors = CORS(api)
-
 api.config["CORS_HEADER"] = "Content-Type"
-
 limiter = Limiter(
     get_remote_address,
     app=api,
@@ -23,7 +20,8 @@ limiter = Limiter(
 @api.route("/", methods=["GET"])
 @limiter.limit("3/seconds", override_defaults=False)
 def get():
-    return ("API Works"), 200
+    content = dbHandler.extension_get("%")
+    return (content), 200
 
 
 @api.route("/add_extension", methods=["POST"])
