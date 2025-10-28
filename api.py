@@ -27,8 +27,13 @@ def get():
 @api.route("/add_extension", methods=["POST"])
 @limiter.limit("1/second", override_defaults=False)
 def post():
-    data = request.get_json()
-    return data, 201
+    if request.args.get("lang") and request.args.get("lang").isalpha():
+        lang = request.args.get("lang")
+        lang = lang.upper()
+        content = dbHandler.extenion_get(lang)
+    else:
+        content = dbHandler.extenion_get("%")
+    return (content), 200
 
 if __name__ == "__main__":
     api.run(debug=True, host="0.0.0.0", port=3000)
