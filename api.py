@@ -25,9 +25,9 @@ def get():
     if request.args.get("lang") and request.args.get("lang").isalpha():
         lang = request.args.get("lang")
         lang = lang.upper()
-        content = dbHandler.extenion_get(lang)
+        content = dbHandler.extension_get(lang)
     else:
-        content = dbHandler.extenion_get("%")
+        content = dbHandler.extension_get("%")
     return (content), 200
 
 

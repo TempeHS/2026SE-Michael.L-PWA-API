@@ -25,7 +25,7 @@ def extension_add(data):
         con = sql.connect("database/data_source.db")
         cur = con.cursor()
         cur.execute(
-            "INSERT INTO extension (name, hyperlink, about, image, language) VALUES (?, ?, ?, ?, ?,)",
+            "INSERT INTO extension (name, hyperlink, about, image, language) VALUES (?, ?, ?, ?, ?)",
             [
                 data["name"],
                 data["hyperlink"],
@@ -56,7 +56,7 @@ schema = {
             "type": "string",
             "pattern": r"^https:\/\/marketplace\.visualstudio\.com\/items\?itemName=(?!.*[<>])[a-zA-Z0-9\-._~:\/?#\[\]@!$&'()*+,;=]*$",
         },
-        "about": {"type", "string"},
+        "about": {"type": "string"},
         "image": {
             "type": "string",
             "pattern": r"^https:\/\/(?!.*[<>])[a-zA-Z0-9\-._~:\/?#\[\]@!$&'()*+,;=]*$",
