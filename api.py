@@ -7,6 +7,14 @@ import logging
 
 import database_manager as dbHandler
 
+api_log = logging.getLogger(__name__)
+logging.basicConfig(
+    filename="api_security_log.log",
+    encoding="utf-8",
+    level=logging.DEBUG,
+    format="%(asctime)s %(message)s",
+)
+
 auth_key = "isaysopensesame"
 
 api = Flask(__name__)
