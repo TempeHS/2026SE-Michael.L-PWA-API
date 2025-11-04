@@ -34,6 +34,10 @@ app_header = {"Authorisation": "isaysopensesame"}
 
 #     return jsonify(data), 201
 
+@app.route("/privacy.html", methods=["GET"])
+def privacy():
+    return render_template("/privacy.html")
+
 @app.route("/index.html", methods=["GET"])
 def root():
     return redirect("/", 302)
