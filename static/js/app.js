@@ -9,7 +9,7 @@ if ("serviceWorker" in navigator) {
 
 document.addEventListener("DOMContentLoaded", function () {
   const navLinks = document.querySelectorAll(".nav-link");
-  const currentUrl = window.location.pathnamel;
+  const currentUrl = window.location.pathname;
 
   navLinks.forEach((link) => {
     const linkUrl = link.getAttribute("href");
@@ -79,5 +79,29 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
     }
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  if (window.location.pathname === "/") {
+    const buttons = [
+      { id: "all", url: "/" },
+      { id: "python", url: "?lang=PYTHON" },
+      { id: "cpp", url: "?lang=CPP" },
+      { id: "bash", url: "?lang=BASH" },
+      { id: "sql", url: "?lang=SQL" },
+      { id: "html", url: "?lang=HTML" },
+      { id: "css", url: "?lang=CSS" },
+      { id: "js", url: "?lang=JAVASCRIPT" },
+    ];
+
+    buttons.forEach((button) => {
+      const element = document.getElementById(button.id);
+      if (element) {
+        element.addEventListener("click", function () {
+          window.location.href = button.url;
+        });
+      }
+    });
   }
 });

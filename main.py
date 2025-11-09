@@ -7,32 +7,19 @@ from flask_wtf import CSRFProtect
 from flask_csp.csp import csp_header
 import logging
 
+# app_log = logging.getLogger(__name__)
+# logging.basicConfig(
+#     filename="main_security_log.log",
+#     encoding="utf-8",
+#     level=logging.DEBUG,
+#     format="%(asctime)s %(message)s",
+# )
+
 app = Flask(__name__)
 csrf = CSRFProtect(app)
 app.secret_key = b"secretsesameseeds"
 
 app_header = {"Authorisation": "isaysopensesame"}
-
-# @app.route("/get-user/<user_id>")
-# def get_user(user_id):
-#     user_data = {
-#         "user_id": user_id,
-#         "name": "John Doe",
-#         "email": "john.doe@example.com",
-#     }
-
-#     extra = request.args.get("extra")
-#     if extra:
-#         user_data["extra"] = extra
-
-#     return jsonify(user_data), 200
-
-
-# @app.route("/create-user", methods=["POST"])
-# def create_user():
-#     data = request.get_json()
-
-#     return jsonify(data), 201
 
 @app.route("/privacy.html", methods=["GET"])
 def privacy():
@@ -41,6 +28,35 @@ def privacy():
 @app.route("/index.html", methods=["GET"])
 def root():
     return redirect("/", 302)
+
+@app.route("/add.html", methods=["POST", "GET"])
+def form():
+    if request.method == "POST":
+        name = request.form["name"]
+        hyperlink = request.form["hyperlink"]
+        about = request.form["about"]
+        image = request.form["image"]
+        language = request.form["language"]
+        data = {
+            "name": name,
+            "hyperlink": hyperlink,
+            "about": about,
+            "image": image,
+            "language": language,
+        }
+        app.logger.critical(data)
+        try:
+            response = requests.post(
+                "http://127.0.0.1:3000/add_extension",
+                json=data,
+                headers=app_header,
+            )
+            data = response.json()
+        except requests.exceptions.RequestException as e:
+            data = {"error": "Failed to retrieve data from the API"}
+        return render_template("/add.html", data=data)
+    else:
+        return render_template("/add.html", data={})
 
 @app.route("/", methods=["GET"])
 @csp_header(
@@ -64,6 +80,9 @@ def root():
 )
 def index():
     url = "http://127.0.0.1:3000"
+    if request.args.get("lang") and request.args.get("lang").isalpha():
+        lang = request.args.get("lang")
+        url += f"?lang={lang}"
     try:
         response = requests.get(url)
         response.raise_for_status()  #http GET request
